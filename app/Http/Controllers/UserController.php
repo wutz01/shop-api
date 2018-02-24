@@ -33,23 +33,43 @@ class UserController extends Controller
     		'email.required' => 'Email Address is required.',
     		'required' => 'The :attribute field is required.'
     	];
-  	  $validator = Validator::make($request->all(), [
+
+      $client = $this->getClient($request->input('userType'));
+
+      $rules = [
           'name'             => 'required',
           'email'		         => 'email|required|unique:users,email',
           'password'	       => 'required|min:6',
           'confirm_password' => 'required|same:password',
-          'image'            => 'image'
-      ], $message);
+          'image'            => 'image',
+          'address'          => 'required',
+          'userType'         => 'required'
+      ];
+
+      if ($client == 'CLIENT') {
+        $rules = array_merge($rules, [
+          'contactPerson'    => 'required',
+          'contactNumber'    => 'required',
+          'designation'      => 'required'
+        ]);
+      }
+  	  $validator = Validator::make($request->all(), $rules, $message);
 
       if ($validator->fails()) {
           $json['errors'] = $validator->messages();
           return response()->json($json, 401);
       }
 
+
     	$user = new User;
-    	$user->name = $request->input('name');
-    	$user->email = $request->input('email');
-    	$user->password = bcrypt($request->input('password'));
+    	$user->name          = $request->input('name');
+    	$user->email         = $request->input('email');
+    	$user->password      = bcrypt($request->input('password'));
+      $user->address       = $request->input('address');
+      $user->contactPerson = $request->has('contactPerson') ? $request->input('contactPerson') : null;
+      $user->contactNumber = $request->has('contactNumber') ? $request->input('contactNumber') : null;
+      $user->designation   = $request->has('designation') ? $request->input('designation') : null;
+      $user->userType      = $client;
     	$user->save();
 
       // $data = $request->all();
@@ -82,6 +102,26 @@ class UserController extends Controller
       return response()->json($json, 200);
     }
 
+    public function getClient($client) {
+      $client = strtoupper($client);
+      switch ($client) {
+        case 'CLIENT':
+          $client = 'CLIENT'
+          break;
+        case 'SALES_AGENT':
+          $client = 'SALES_AGENT';
+          break;
+        case 'ADMIN':
+          $client = 'ADMIN';
+          break;
+        default:
+          $client = 'CLIENT';
+          break;
+      }
+
+      return $client;
+    }
+
     public function userLogout(Request $request) {
       $request->user()->token()->revoke();
       return response(null, 204);
@@ -108,10 +148,26 @@ class UserController extends Controller
     		'required' => 'The :attribute field is required.'
     	];
       $userId = $request->input('userId');
-  	  $validator = Validator::make($request->all(), [
+
+      $client = $this->getClient($request->input('userType'));
+
+      $rules = [
           'name'             => 'required',
-          'email'		         => 'email|required|unique:users,email,'.$userId
-      ], $message);
+          'email'		         => 'email|required|unique:users,email,'.$userId,
+          'image'            => 'image',
+          'address'          => 'required',
+          'userType'         => 'required'
+      ];
+
+      if ($client == 'CLIENT') {
+        $rules = array_merge($rules, [
+          'contactPerson'    => 'required',
+          'contactNumber'    => 'required',
+          'designation'      => 'required'
+        ]);
+      }
+
+  	  $validator = Validator::make($request->all(), $rules, $message);
 
       if (!isset($userId)) {
         $json['error'] = 'User not found';
@@ -126,6 +182,11 @@ class UserController extends Controller
     	$user = User::find($userId);
     	$user->name = $request->input('name');
     	$user->email = $request->input('email');
+      $user->address       = $request->input('address');
+      $user->contactPerson = $request->has('contactPerson') ? $request->input('contactPerson') : null;
+      $user->contactNumber = $request->has('contactNumber') ? $request->input('contactNumber') : null;
+      $user->designation   = $request->has('designation') ? $request->input('designation') : null;
+      $user->userType      = $client;
     	$user->save();
 
       $json['user'] = $user;

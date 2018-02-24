@@ -1,7 +1,4 @@
 <?php
-
-use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -12,10 +9,6 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
 
 Route::group(['middleware' => 'auth:api'], function () {
   // USER LOGOUT
@@ -45,12 +38,16 @@ Route::group(['middleware' => 'auth:api'], function () {
    /*
     * PRODUCTS
     */
-
-    Route::get('product/all', 'ProductController@allProducts');
-    Route::get('product/{id}', 'ProductController@getProduct');
     Route::post('product/update', 'ProductController@updateProduct');
     Route::post('product/create', 'ProductController@createProduct');
 });
 
 Route::post('user/login', 'UserController@authenticate');
 Route::post('user/register', 'UserController@register');
+
+/*
+ * PRODUCTS
+ */
+
+Route::get('product/all', 'ProductController@allProducts');
+Route::get('product/{id}', 'ProductController@getProduct');
