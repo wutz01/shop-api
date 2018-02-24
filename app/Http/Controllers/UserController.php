@@ -116,7 +116,6 @@ class UserController extends Controller
           break;
         default:
           $client = 'CLIENT';
-          break;
       }
 
       return $client;
