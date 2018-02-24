@@ -1,14 +1,26 @@
 # SHOP API
 
+## ACCOUNT TYPES:
+- ADMIN
+- CLIENT
+- SALES_AGENT
+
 # APIs
 
 * login - `api/user/login`
 * register - `api/user/register`
-  - accepts:
+  - accepts (required):
     - name
     - email
     - password
     - confirm_password
+    - address
+    - contactPerson (Required if CLIENT)
+    - contactNumber (Required if CLIENT)
+    - designation (Required if CLIENT)
+    - userType
+* all products - `api/product/all`
+* view product - `api/product/{id}`
 
 #### Authenticated user can access...
 
@@ -17,10 +29,15 @@
 * all users - `api/user/all`
 * view user - `api/user/{id}`
 * update user - `api/user/update`
-  - accepts:
+  - accepts (required):
     - userId
     - name
     - email
+    - address
+    - contactPerson (Required if CLIENT)
+    - contactNumber (Required if CLIENT)
+    - designation (Required if CLIENT)
+    - userType
 
 ##### product categories
 * all categories - `api/category/all`
@@ -36,8 +53,6 @@
     - description (text)
 
 ##### products
-* all products - `api/product/all`
-* view product - `api/product/{id}`
 * create product - `api/product/create`
   - accepts:
     - name (string)
