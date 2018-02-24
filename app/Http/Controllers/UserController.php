@@ -66,9 +66,9 @@ class UserController extends Controller
     	$user->email         = $request->input('email');
     	$user->password      = bcrypt($request->input('password'));
       $user->address       = $request->input('address');
-      $user->contactPerson = $request->has('contactPerson') ? $request->input('contactPerson') : null;
-      $user->contactNumber = $request->has('contactNumber') ? $request->input('contactNumber') : null;
-      $user->designation   = $request->has('designation') ? $request->input('designation') : null;
+      $user->contactPerson = $request->has('contactPerson') ? $request->input('contactPerson') : '';
+      $user->contactNumber = $request->has('contactNumber') ? $request->input('contactNumber') : '';
+      $user->designation   = $request->has('designation') ? $request->input('designation') : '';
       $user->userType      = $client;
     	$user->save();
 
@@ -105,17 +105,10 @@ class UserController extends Controller
     public function getClient($client) {
       $client = strtoupper($client);
       switch ($client) {
-        case 'CLIENT':
-          $client = 'CLIENT'
-          break;
-        case 'SALES_AGENT':
-          $client = 'SALES_AGENT';
-          break;
-        case 'ADMIN':
-          $client = 'ADMIN';
-          break;
-        default:
-          $client = 'CLIENT';
+        case 'CLIENT': $client = 'CLIENT'; break;
+        case 'SALES_AGENT': $client = 'SALES_AGENT'; break;
+        case 'ADMIN': $client = 'ADMIN'; break;
+        default: $client = 'CLIENT'; break;
       }
 
       return $client;
