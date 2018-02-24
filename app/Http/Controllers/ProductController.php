@@ -68,8 +68,11 @@ class ProductController extends Controller
 
     public function getProduct ($id) {
       $json['product'] = $product = Product::find($id);
-      $json['categories'] = $product->categories;
-      return response()->json($json, 200);
+      if ($product) {
+        $json['categories'] = $product->categories;
+        return response()->json($json, 200);
+      }
+      return response()->json($json, 404);
     }
 
     public function updateProduct (Request $request) {
