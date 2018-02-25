@@ -35,6 +35,15 @@ Route::group(['middleware' => 'auth:api'], function () {
    Route::post('category/update', 'ProductController@updateCategory');
    Route::post('category/create', 'ProductController@createCategory');
 
+  /*
+   * PRODUCTS SUPPLIER
+   */
+
+   Route::get('supplier/all', 'SupplierController@allSuppliers');
+   Route::get('supplier/{id}', 'SupplierController@getSupplier');
+   Route::post('supplier/update', 'SupplierController@updateSupplier');
+   Route::post('supplier/create', 'SupplierController@createSupplier');
+
    /*
     * PRODUCTS
     */

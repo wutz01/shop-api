@@ -15,4 +15,11 @@ class Product extends Model
   {
     return $this->belongsToMany('App\Category', 'category_product', 'product_id', 'category_id');
   }
+
+  /*
+   * This Product belongs to a supplier
+   */
+  public function supplier () {
+    return $this->belongsTo('App\Supplier');
+  }
 }

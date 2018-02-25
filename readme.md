@@ -7,8 +7,8 @@
 
 # APIs
 
-* login - `api/user/login`
-* register - `api/user/register`
+* login - `api/user/login` (POST)
+* register - `api/user/register` (POST)
   - accepts (required):
     - name
     - email
@@ -24,11 +24,11 @@
 
 #### Authenticated user can access...
 
-* logout - `api/user/logout`
-* me - `api/getUserLogin`
-* all users - `api/user/all`
-* view user - `api/user/{id}`
-* update user - `api/user/update`
+* logout - `api/user/logout` (POST)
+* me - `api/getUserLogin` (GET)
+* all users - `api/user/all` (GET)
+* view user - `api/user/{id}` (GET)
+* update user - `api/user/update` (POST)
   - accepts (required):
     - userId
     - name
@@ -40,29 +40,47 @@
     - userType
 
 ##### product categories
-* all categories - `api/category/all`
-* view category - `api/category/{id}`
-* create category - `api/category/create`
+* all categories - `api/category/all` (GET)
+* view category - `api/category/{id}` (GET)
+* create category - `api/category/create` (POST)
   - accepts:
     - name (string)
     - description (text)
-* update category - `api/category/update`
+* update category - `api/category/update` (POST)
   - accepts:
     - catId (integer)
     - name (string)
     - description (text)
 
+##### product supplier
+* all suppliers - `api/supplier/all` (GET)
+* view supplier - `api/supplier/{id}` (GET)
+* create supplier - `api/supplier/create` (POST)
+  - accepts:
+    - name (string)
+    - address (text)
+    - currency (string)
+
+* update supplier - `api/supplier/update` (POST)
+  - accepts:
+    - supplierId (integer)
+    - name (string)
+    - address (text)
+    - currency (string)
+
 ##### products
-* create product - `api/product/create`
+* create product - `api/product/create` (POST)
   - accepts:
     - name (string)
     - description (text)
     - price (float)
     - categories (array)
-* update product - `api/product/update`
+    - supplierId (integer)
+* update product - `api/product/update` (POST)
   - accepts:
     - prodId (integer)
     - name (string)
     - description (text)
     - price (float)
     - categories (array)
+    - supplierId (integer)

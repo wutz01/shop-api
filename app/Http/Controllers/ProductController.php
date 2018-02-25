@@ -70,6 +70,7 @@ class ProductController extends Controller
       $json['product'] = $product = Product::find($id);
       if ($product) {
         $json['categories'] = $product->categories;
+        $json['supplier'] = $product->supplier;
         return response()->json($json, 200);
       }
       return response()->json($json, 404);
@@ -81,7 +82,8 @@ class ProductController extends Controller
 
       $validator = Validator::make($request->all(), [
           'name'             => 'required',
-          'description'		   => 'required'
+          'description'		   => 'required',
+          'supplier_id'      => 'required'
       ]);
 
       if ($validator->fails()) {
@@ -92,6 +94,7 @@ class ProductController extends Controller
       $product->name = $request->input('name');
       $product->description = $request->input('description');
       $product->price = $request->input('price');
+      $product->supplier_id = $request->input('supplierId');
       $product->save();
 
       $product->categories()->sync($request->input('categories'));
@@ -103,7 +106,8 @@ class ProductController extends Controller
     public function createProduct (Request $request) {
       $validator = Validator::make($request->all(), [
           'name'             => 'required',
-          'description'		   => 'required'
+          'description'		   => 'required',
+          'supplier_id'      => 'required'
       ]);
 
       if ($validator->fails()) {
@@ -114,6 +118,7 @@ class ProductController extends Controller
       $product->name = $request->input('name');
       $product->description = $request->input('description');
       $product->price = $request->input('price') ? $request->input('price') : 0.00;
+      $product->supplier_id = $request->input('supplierId');
       $product->save();
 
       $product->categories()->sync($request->input('categories'));
