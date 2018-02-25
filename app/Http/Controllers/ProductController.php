@@ -94,7 +94,7 @@ class ProductController extends Controller
       $product->name = $request->input('name');
       $product->description = $request->input('description');
       $product->price = $request->input('price');
-      $product->supplier_id = $request->input('supplierId');
+      $product->supplier_id = $request->input('supplier_id');
       $product->save();
 
       $product->categories()->sync($request->input('categories'));
@@ -118,7 +118,7 @@ class ProductController extends Controller
       $product->name = $request->input('name');
       $product->description = $request->input('description');
       $product->price = $request->input('price') ? $request->input('price') : 0.00;
-      $product->supplier_id = $request->input('supplierId');
+      $product->supplier_id = $request->input('supplier_id');
       $product->save();
 
       $product->categories()->sync($request->input('categories'));

@@ -14,8 +14,12 @@ class SupplierController extends Controller
   }
 
   public function getSupplier ($id) {
-    $json['supplier'] = Supplier::find($id);
-    return response()->json($json, 200);
+    $json['supplier'] = $supplier = Supplier::find($id);
+    if ($supplier) {
+      $json['products'] = $supplier->products;
+      return response()->json($json, 200);
+    }
+    return response()->json($json, 404);
   }
 
   public function updateSupplier (Request $request) {
