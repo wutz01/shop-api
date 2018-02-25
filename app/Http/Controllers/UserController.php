@@ -17,6 +17,7 @@ class UserController extends Controller
     		if(Auth::attempt(['email'=> $email, 'password' => $password])){
           $user = Auth::user();
           $json['token'] = $user->createToken('Ordering')->accessToken;
+          $json['user'] = $user;
           return response()->json($json, 200);
     		} else {
     			$json['error']	   = "Email / Password is incorrect.";
