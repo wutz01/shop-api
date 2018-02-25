@@ -16,8 +16,12 @@ class ProductController extends Controller
     }
 
     public function getCategory ($id) {
-      $json['category'] = Category::find($id);
-      return response()->json($json, 200);
+      $json['category'] = $category = Category::find($id);
+      if ($category) {
+        $json['products'] = $category->products;
+        return response()->json($json, 200);
+      }
+      return response()->json($json, 404);
     }
 
     public function updateCategory (Request $request) {

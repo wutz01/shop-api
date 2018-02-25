@@ -54,6 +54,9 @@ Route::group(['middleware' => 'auth:api'], function () {
 Route::post('user/login', 'UserController@authenticate');
 Route::post('user/register', 'UserController@register');
 
+// Generate UUID
+Route::get('generate/guestID', 'ToolsController@generateUUID');
+
 /*
  * PRODUCTS
  */
