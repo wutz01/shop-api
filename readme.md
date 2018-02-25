@@ -19,8 +19,9 @@
     - contactNumber (Required if CLIENT)
     - designation (Required if CLIENT)
     - userType
-* all products - `api/product/all`
-* view product - `api/product/{id}`
+* all products - `api/product/all` (GET)
+* view product - `api/product/{id}` (GET)
+* generate Guest ID - `api/generate/guestID` (GET)
 
 #### Authenticated user can access...
 
