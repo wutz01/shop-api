@@ -135,6 +135,7 @@ class UserController extends Controller
       // }
 
     	$json['token'] = $user->createToken('Ordering')->accessToken;
+      $json['user'] = $user;
       return response()->json($json, 200);
     }
 
