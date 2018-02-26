@@ -34,7 +34,7 @@ class SupplierController extends Controller
 
     if ($validator->fails()) {
       $json['errors'] = $validator->messages();
-      return response()->json($json, 401);
+      return response()->json($json, 400);
     }
     $supplier = Supplier::find($supplierId);
     $supplier->name     = $request->input('name');
@@ -55,7 +55,7 @@ class SupplierController extends Controller
 
     if ($validator->fails()) {
       $json['errors'] = $validator->messages();
-      return response()->json($json, 401);
+      return response()->json($json, 400);
     }
 
     $supplier = new Supplier;

@@ -9,6 +9,15 @@ class Product extends Model
   protected $table = 'products';
 
   /**
+   * The attributes that should be hidden for arrays.
+   *
+   * @var array
+   */
+  protected $hidden = [
+      'supplier_id'
+  ];
+
+  /**
    * The category that belong to the products.
    */
   public function categories()

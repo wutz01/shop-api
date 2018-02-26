@@ -35,7 +35,7 @@ class ProductController extends Controller
 
       if ($validator->fails()) {
         $json['errors'] = $validator->messages();
-        return response()->json($json, 401);
+        return response()->json($json, 400);
       }
       $category = Category::find($catId);
       $category->name = $request->input('name');
@@ -54,7 +54,7 @@ class ProductController extends Controller
 
       if ($validator->fails()) {
         $json['errors'] = $validator->messages();
-        return response()->json($json, 401);
+        return response()->json($json, 400);
       }
       $category = new Category;
       $category->name = $request->input('name');
@@ -92,7 +92,7 @@ class ProductController extends Controller
 
       if ($validator->fails()) {
         $json['errors'] = $validator->messages();
-        return response()->json($json, 401);
+        return response()->json($json, 400);
       }
       $product = Product::find($prodId);
       $product->name = $request->input('name');
@@ -116,7 +116,7 @@ class ProductController extends Controller
 
       if ($validator->fails()) {
         $json['errors'] = $validator->messages();
-        return response()->json($json, 401);
+        return response()->json($json, 400);
       }
       $product = new Product;
       $product->name = $request->input('name');

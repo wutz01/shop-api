@@ -5,9 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use Validator, Auth, DB;
+use Hash;
 
 class UserController extends Controller
 {
+
+    private function passwordCorrect($suppliedPassword, $user)
+    {
+        return Hash::check($suppliedPassword, $user->password, []);
+    }
+
     public function authenticate (Request $request) {
       $email = $request->input('email');
     	$password = $request->input('password');
@@ -21,7 +28,7 @@ class UserController extends Controller
           return response()->json($json, 200);
     		} else {
     			$json['error']	   = "Email / Password is incorrect.";
-          return response()->json($json, 401);
+          return response()->json($json, 400);
     		}
     	} else {
     		$json['error']		= "Please enter email and password.";
@@ -38,19 +45,30 @@ class UserController extends Controller
       $client = $this->getClient($request->input('userType'));
 
       $rules = [
-          'name'             => 'required',
+          'firstname'        => 'required',
+          'lastname'         => 'required',
+          'address'          => 'required',
+          'city'             => 'required',
+          'mobileNo'         => 'required',
+          'phoneNo'          => 'required',
           'email'		         => 'email|required|unique:users,email',
           'password'	       => 'required|min:6',
           'confirm_password' => 'required|same:password',
           'image'            => 'image',
-          'address'          => 'required',
+          'country'          => 'required',
           'userType'         => 'required'
       ];
 
       if ($client == 'CLIENT') {
         $rules = array_merge($rules, [
-          'contactPerson'    => 'required',
-          'contactNumber'    => 'required',
+          'companyName'      => 'required',
+          'companyEmail'     => 'required|email',
+          'lineBusiness'     => 'required',
+          'companyAddress'   => 'required',
+          'companyCity'      => 'required',
+          'companyZipCode'   => 'required',
+          'companyLandLine'  => 'required',
+          'companyCountry'   => 'required',
           'designation'      => 'required'
         ]);
       }
@@ -58,18 +76,35 @@ class UserController extends Controller
 
       if ($validator->fails()) {
           $json['errors'] = $validator->messages();
-          return response()->json($json, 401);
+          return response()->json($json, 400);
       }
 
 
     	$user = new User;
-    	$user->name          = $request->input('name');
+    	$user->firstname     = $request->input('firstname');
+    	$user->middlename    = $request->input('middlename');
+    	$user->lastname      = $request->input('lastname');
+    	$user->mobileNo      = $request->input('mobileNo');
+    	$user->phoneNo       = $request->input('phoneNo');
     	$user->email         = $request->input('email');
     	$user->password      = bcrypt($request->input('password'));
       $user->address       = $request->input('address');
-      $user->contactPerson = $request->has('contactPerson') ? $request->input('contactPerson') : '';
-      $user->contactNumber = $request->has('contactNumber') ? $request->input('contactNumber') : '';
-      $user->designation   = $request->has('designation') ? $request->input('designation') : '';
+      $user->city          = $request->input('city');
+      $user->zipCode       = $request->input('zipCode');
+      $user->country       = $request->input('country');
+
+      if ($client == 'CLIENT') {
+        $user->companyName   = $request->has('companyName') ? $request->input('companyName') : '';
+        $user->companyEmail  = $request->has('companyEmail') ? $request->input('companyEmail') : '';
+        $user->lineBusiness  = $request->has('lineBusiness') ? $request->input('lineBusiness') : '';
+        $user->companyAddress = $request->has('companyAddress') ? $request->input('companyAddress') : '';
+        $user->companyCity    = $request->has('companyCity') ? $request->input('companyCity') : '';
+        $user->companyZipCode = $request->has('companyZipCode') ? $request->input('companyZipCode') : '';
+        $user->companyLandLine= $request->has('companyLandLine') ? $request->input('companyLandLine') : '';
+        $user->companyCountry = $request->has('companyCountry') ? $request->input('companyCountry') : '';
+        $user->designation   = $request->has('designation') ? $request->input('designation') : '';
+      }
+
       $user->userType      = $client;
     	$user->save();
 
@@ -145,18 +180,36 @@ class UserController extends Controller
       $client = $this->getClient($request->input('userType'));
 
       $rules = [
-          'name'             => 'required',
+          'firstname'        => 'required',
+          'lastname'         => 'required',
+          'address'          => 'required',
+          'city'             => 'required',
+          'mobileNo'         => 'required',
+          'phoneNo'          => 'required',
           'email'		         => 'email|required|unique:users,email,'.$userId,
           'image'            => 'image',
-          'address'          => 'required',
+          'country'          => 'required',
           'userType'         => 'required'
       ];
 
       if ($client == 'CLIENT') {
         $rules = array_merge($rules, [
-          'contactPerson'    => 'required',
-          'contactNumber'    => 'required',
+          'companyName'      => 'required',
+          'companyEmail'     => 'required|email',
+          'lineBusiness'     => 'required',
+          'companyAddress'   => 'required',
+          'companyCity'      => 'required',
+          'companyZipCode'   => 'required',
+          'companyLandLine'  => 'required',
+          'companyCountry'   => 'required',
           'designation'      => 'required'
+        ]);
+      }
+
+      if ($request->has('newPassword')) {
+        $rules = array_merge($rules, [
+          'newPassword' => 'required|min:6',
+          'confirm_password' => 'same:newPassword'
         ]);
       }
 
@@ -169,16 +222,38 @@ class UserController extends Controller
 
       if ($validator->fails()) {
           $json['errors'] = $validator->messages();
-          return response()->json($json, 401);
+          return response()->json($json, 400);
       }
 
     	$user = User::find($userId);
-    	$user->name = $request->input('name');
-    	$user->email = $request->input('email');
-      $user->address       = $request->input('address');
-      $user->contactPerson = $request->has('contactPerson') ? $request->input('contactPerson') : null;
-      $user->contactNumber = $request->has('contactNumber') ? $request->input('contactNumber') : null;
-      $user->designation   = $request->has('designation') ? $request->input('designation') : null;
+
+      if (!$this->passwordCorrect($request->input('oldPassword'), $user)) return response()->json(['error' => 'Old Password does not match.'], 400);
+      if ($request->has('newPassword')) {
+        $user->password = bcrypt($request->input('newPassword'));
+      }
+      $user->firstname     = $request->has('firstname') ? $request->input('firstname') : $user->firstname;
+    	$user->middlename    = $request->has('middlename') ? $request->input('middlename') : $user->middlename;
+    	$user->lastname      = $request->has('lastname') ? $request->input('lastname') : $user->lastname;
+    	$user->mobileNo      = $request->has('mobileNo') ? $request->input('mobileNo') : $user->mobileNo;
+    	$user->phoneNo       = $request->has('phoneNo') ? $request->input('phoneNo') : $user->phoneNo;
+    	$user->email         = $request->has('email') ? $request->input('email') : $user->email;
+      $user->address       = $request->has('address') ? $request->input('address') : $user->address;
+      $user->city          = $request->has('city') ? $request->input('city') : $user->city;
+      $user->zipCode       = $request->has('zipCode') ? $request->input('zipCode') : $user->zipCode;
+      $user->country       = $request->has('country') ? $request->input('country') : $user->country;
+
+      if ($client == 'CLIENT') {
+        $user->companyName   = $request->has('companyName') ? $request->input('companyName') : $user->companyName;
+        $user->companyEmail  = $request->has('companyEmail') ? $request->input('companyEmail') : $user->companyEmail;
+        $user->lineBusiness  = $request->has('lineBusiness') ? $request->input('lineBusiness') : $user->lineBusiness;
+        $user->companyAddress = $request->has('companyAddress') ? $request->input('companyAddress') : $user->companyAddress;
+        $user->companyCity    = $request->has('companyCity') ? $request->input('companyCity') : $user->companyCity;
+        $user->companyZipCode = $request->has('companyZipCode') ? $request->input('companyZipCode') : $user->companyZipCode;
+        $user->companyLandLine= $request->has('companyLandLine') ? $request->input('companyLandLine') : $user->companyLandLine;
+        $user->companyCountry = $request->has('companyCountry') ? $request->input('companyCountry') : $user->companyCountry;
+        $user->designation   = $request->has('designation') ? $request->input('designation') : $user->designation;
+      }
+
       $user->userType      = $client;
     	$user->save();
 
