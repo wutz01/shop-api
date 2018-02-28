@@ -160,7 +160,7 @@ class ProductController extends Controller
          $orig_name  = $image->getClientOriginalName();
 
          $for_upload = $filename . "." . $ext;
-         dd(public_path($destinationPath));
+         dd(url() . 'uploads/user');
          // $is_success = $image->move(public_path($destinationPath), $for_upload);
 
          // if($is_success){
