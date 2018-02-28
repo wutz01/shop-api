@@ -51,10 +51,11 @@ class CartController extends Controller
           'reservePrice' => $product->price,
           'finalPrice' => 0.00
         ]);
+        $json['cart'] = $cart;
+        $json['items'] = $cart->items;
+        return response()->json($json, 200);
       }
 
-      $json['cart'] = $cart;
-      $json['items'] = $cart->items;
-      return response()->json($json, 200);
+      return response()->json(['error' => 'Cart not found'], 400);
     }
 }
