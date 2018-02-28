@@ -43,7 +43,7 @@
     - items (array)
       - productId
       - quantity
-* get cart by guestId - `api/guest/{guestId}` (GET)
+* get cart by guestId - `api/guest/{guestId}/cart` (GET)
 #### Authenticated user can access...
 
 * logout - `api/user/logout` (POST)
@@ -131,4 +131,4 @@
     - items (array)
       - productId
       - quantity
-* get cart by userId - `api/user/{userId}` (GET)
+* get cart by userId - `api/user/my-cart` (GET)

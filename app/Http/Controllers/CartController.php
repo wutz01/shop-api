@@ -6,11 +6,12 @@ use Illuminate\Http\Request;
 use App\Cart;
 use App\CartItems;
 use App\Product;
+use Auth;
 
 class CartController extends Controller
 {
-    public function getCartByUserId($userId) {
-      $json['cart'] = $cart = Cart::where('userId', $userId)->where('status', 'ACTIVE', 'AND')->first();
+    public function getCartByUser() {
+      $json['cart'] = $cart = Cart::where('userId', Auth::user()->id)->where('status', 'ACTIVE', 'AND')->first();
       if ($cart) {
         $json['items'] = $cart->items;
       }

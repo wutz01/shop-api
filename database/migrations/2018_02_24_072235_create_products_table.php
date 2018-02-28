@@ -19,6 +19,7 @@ class CreateProductsTable extends Migration
             $table->text('description');
             $table->decimal('price', 19,2);
             $table->string('status')->default('ACTIVE');
+            $table->string('isFeatured')->default("false");
             $table->timestamps();
         });
 

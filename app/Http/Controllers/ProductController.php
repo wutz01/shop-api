@@ -99,6 +99,12 @@ class ProductController extends Controller
       $product->description = $request->input('description');
       $product->price = $request->input('price');
       $product->supplier_id = $request->input('supplier_id');
+      if ($request->has('status')) {
+        $product->status = strtoupper($request->input('status'));
+      }
+      if ($request->has('isFeatured')) {
+        $product->isFeatured = $request->input('isFeatured');
+      }
       $product->save();
 
       $product->categories()->sync($request->input('categories'));
@@ -123,6 +129,12 @@ class ProductController extends Controller
       $product->description = $request->input('description');
       $product->price = $request->input('price') ? $request->input('price') : 0.00;
       $product->supplier_id = $request->input('supplier_id');
+      if ($request->has('status')) {
+        $product->status = strtoupper($request->input('status'));
+      }
+      if ($request->has('isFeatured')) {
+        $product->isFeatured = $request->input('isFeatured');
+      }
       $product->save();
 
       $product->categories()->sync($request->input('categories'));
