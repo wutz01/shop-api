@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Product;
+use App\ProductImages;
 use App\Category;
 use Validator, Auth;
 
@@ -22,6 +23,15 @@ class ProductController extends Controller
         return response()->json($json, 200);
       }
       return response()->json($json, 404);
+    }
+
+    public function deleteCategory ($catId) {
+      $category = Category::find($catId);
+      if (!$category) return response()->json(['error' => 'Category not found'], 400);
+      $category->status = "INACTIVE";
+      $category->save();
+      $json['category'] = $category;
+      return response()->json($json, 200);
     }
 
     public function updateCategory (Request $request) {
@@ -78,9 +88,19 @@ class ProductController extends Controller
       if ($product) {
         $json['categories'] = $product->categories;
         $json['supplier'] = $product->supplier;
+        $json['images'] = $product->images;
         return response()->json($json, 200);
       }
       return response()->json($json, 404);
+    }
+
+    public function deleteProduct ($productId) {
+      $product = Product::find($productId);
+      if (!$product) return response()->json(['error' => 'Product not found'], 400);
+      $product->status = "INACTIVE";
+      $product->save();
+      $json['product'] = $product;
+      return response()->json($json, 200);
     }
 
     public function updateProduct (Request $request) {
@@ -146,31 +166,59 @@ class ProductController extends Controller
       return response()->json($json, 200);
     }
 
-    public function testUploadImage(Request $request) {
-      $data = $request->all();
-      if($image = array_pull($data, 'imageData')){
-       $destinationPath = 'uploads/user/';
-       if (!file_exists(public_path($destinationPath))) {
-           mkdir(public_path($destinationPath), 0777, true);
-       }
+    public function uploadProductImage(Request $request) {
+      $validator = Validator::make($request->all(), [
+          'productId'     => 'required',
+          'productImage'	=> 'required|image'
+      ]);
 
-       if($image->isValid()){
+      if ($validator->fails()) {
+        $json['errors'] = $validator->messages();
+        return response()->json($json, 400);
+      }
+
+      $productId = $request->input('productId');
+      $product = Product::find($productId);
+      if (!$product) return response()->json(['error' => 'Product not found'], 400);
+
+      $data = $request->all();
+      if($image = array_pull($data, 'productImage')){
+        $destinationPath = 'uploads/products/'.$product->id.'/';
+        if (!file_exists(public_path($destinationPath))) {
+         mkdir(public_path($destinationPath), 0777, true);
+        }
+
+        if($image->isValid()){
          $ext        = $image->getClientOriginalExtension();
          $filename   = $image->getFilename();
          $orig_name  = $image->getClientOriginalName();
 
          $for_upload = $filename . "." . $ext;
-         dd(url() . 'uploads/user');
-         // $is_success = $image->move(public_path($destinationPath), $for_upload);
+         $is_success = $image->move(public_path($destinationPath), $for_upload);
 
-         // if($is_success){
-         //     $user->image_path    = $destinationPath;
-         //     $user->filename      = $filename;
-         //     $user->orig_filename = $orig_name;
-         //     $user->extension     = $ext;
-         //     $user->save();
-         // }
-       }
+         if($is_success){
+           $fileImage               = new ProductImages;
+           $fileImage->productId    = $product->id;
+           $fileImage->imagePath    = url('/') . $destinationPath;
+           $fileImage->filename     = $filename;
+           $fileImage->origFilename = $orig_name;
+           $fileImage->extension    = $ext;
+           $fileImage->save();
+           $json['productImage'] = $fileImage;
+           $json['product'] = $product;
+           $json['productAssets'] = $product->images;
+           return response()->json($json, 200);
+         } else {
+           return response()->json(['error' => 'Image upload failed.'], 400);
+         }
+        }
       }
+
+      return response()->json(['error' => 'Image upload failed.'], 400);
+    }
+
+    public function deleteProductImage ($productId, Request $request) {
+      dd($productId);
+      dd($request->all());
     }
 }

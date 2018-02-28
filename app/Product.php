@@ -31,4 +31,11 @@ class Product extends Model
   public function supplier () {
     return $this->belongsTo('App\Supplier');
   }
+
+  /*
+   * This Product has many images
+   */
+  public function images () {
+    return $this->hasMany('App\ProductImages', 'productId');
+  }
 }

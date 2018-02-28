@@ -32,6 +32,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
    Route::get('category/all', 'ProductController@allCategory');
    Route::get('category/{id}', 'ProductController@getCategory');
+   Route::get('category/{catId}/delete', 'ProductController@deleteCategory');
    Route::post('category/update', 'ProductController@updateCategory');
    Route::post('category/create', 'ProductController@createCategory');
 
@@ -43,13 +44,16 @@ Route::group(['middleware' => 'auth:api'], function () {
    Route::get('supplier/{id}', 'SupplierController@getSupplier');
    Route::post('supplier/update', 'SupplierController@updateSupplier');
    Route::post('supplier/create', 'SupplierController@createSupplier');
+   Route::get('supplier/{supplierId}/delete', 'SupplierController@deleteSupplier');
 
    /*
     * PRODUCTS
     */
     Route::post('product/update', 'ProductController@updateProduct');
     Route::post('product/create', 'ProductController@createProduct');
-    Route::post('product/upload/image', 'ProductController@testUploadImage');
+    Route::post('product/upload/image', 'ProductController@uploadProductImage');
+    Route::get('product/delete/image/{productId}', 'ProductController@deleteProductImage');
+    Route::get('product/delete/{productId}', 'ProductController@deleteProduct');
 
    /*
     * CART

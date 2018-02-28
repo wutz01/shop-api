@@ -22,6 +22,15 @@ class SupplierController extends Controller
     return response()->json($json, 404);
   }
 
+  public function deleteSupplier ($supplierId) {
+    $supplier = Supplier::find($catId);
+    if (!$supplier) return response()->json(['error' => 'Supplier not found'], 400);
+    $supplier->status = "INACTIVE";
+    $supplier->save();
+    $json['supplier'] = $supplier;
+    return response()->json($json, 200);
+  }
+
   public function updateSupplier (Request $request) {
     $supplierId = $request->input('supplierId');
     if (!isset($supplierId)) return response()->json(['error' => 'Supplier not found'], 404);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use App\UserImage;
 use Validator, Auth, DB;
 use Hash;
 
@@ -109,7 +110,7 @@ class UserController extends Controller
     	$user->save();
 
       $data = $request->all();
-      if($image = array_pull($data, 'imageData')){
+      if($image = array_pull($data, 'userImage')){
        $destinationPath = 'uploads/user/'.$user->id.'/';
        if (!file_exists(public_path($destinationPath))) {
            mkdir(public_path($destinationPath), 0777, true);
@@ -124,17 +125,25 @@ class UserController extends Controller
          $is_success = $image->move(public_path($destinationPath), $for_upload);
 
          if($is_success){
-             $user->image_path    = $destinationPath;
-             $user->filename      = $filename;
-             $user->orig_filename = $orig_name;
-             $user->extension     = $ext;
-             $user->save();
+           $fileImage = new UserImage;
+           $fileImage->userId = $user->id;
+           $fileImage->imagePath = url('/') . $destinationPath;
+           $fileImage->filename = $filename;
+           $fileImage->origFilename = $orig_name;
+           $fileImage->extension = $ext;
+           $fileImage->save();
          }
        }
       }
 
     	$json['token'] = $user->createToken('Ordering')->accessToken;
       $json['user'] = $user;
+
+      if ($user->image) {
+        $json['imageUrl'] = $user->image->imagePath . $user->id . '/' . $user->image->filename . '.' . $user->image->extension;
+      } else {
+        $json['imageUrl'] = null;
+      }
       return response()->json($json, 200);
     }
 
@@ -157,6 +166,11 @@ class UserController extends Controller
 
     public function getUserLogin () {
       $json['user'] = $user = Auth::user();
+      if ($user->image) {
+        $json['imageUrl'] = $user->image->imagePath . $user->id . '/' . $user->image->filename . '.' . $user->image->extension;
+      } else {
+        $json['imageUrl'] = null;
+      }
       return response()->json($json, 200);
     }
 
@@ -166,7 +180,12 @@ class UserController extends Controller
     }
 
     public function getUser ($id) {
-      $json['user'] = User::find($id);
+      $json['user'] = $user = User::find($id);
+      if ($user->image) {
+        $json['imageUrl'] = $user->image->imagePath . $user->id . '/' . $user->image->filename . '.' . $user->image->extension;
+      } else {
+        $json['imageUrl'] = null;
+      }
       return response()->json($json, 200);
     }
 
@@ -257,7 +276,43 @@ class UserController extends Controller
       $user->userType      = $client;
     	$user->save();
 
+      $fileImage = $user->image;
+      $data = $request->all();
+      if($image = array_pull($data, 'userImage')){
+       $destinationPath = 'uploads/user/'.$user->id.'/';
+       if (!file_exists(public_path($destinationPath))) {
+           mkdir(public_path($destinationPath), 0777, true);
+       }
+
+       if($image->isValid()){
+         $ext        = $image->getClientOriginalExtension();
+         $filename   = $image->getFilename();
+         $orig_name  = $image->getClientOriginalName();
+
+         $for_upload = $filename . "." . $ext;
+         $is_success = $image->move(public_path($destinationPath), $for_upload);
+
+         if($is_success){
+           if (!$fileImage) {
+             $fileImage = new UserImage;
+           }
+           $fileImage->imagePath = url('/') . $destinationPath;
+           $fileImage->filename = $filename;
+           $fileImage->origFilename = $orig_name;
+           $fileImage->extension = $ext;
+           $fileImage->save();
+         }
+       }
+      }
+
       $json['user'] = $user;
+
+      if ($fileImage) {
+        $json['imageUrl'] = $fileImage->imagePath . $user->id . '/' . $fileImage->filename . '.' . $fileImage->extension;
+      } else {
+        $json['imageUrl'] = null;
+      }
+
       return response()->json($json, 200);
     }
 }
