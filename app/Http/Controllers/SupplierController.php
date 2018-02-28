@@ -24,7 +24,7 @@ class SupplierController extends Controller
 
   public function updateSupplier (Request $request) {
     $supplierId = $request->input('supplierId');
-    if (!isset($catId)) return response()->json(['error' => 'Supplier not found'], 404);
+    if (!isset($supplierId)) return response()->json(['error' => 'Supplier not found'], 404);
 
     $validator = Validator::make($request->all(), [
         'name'     => 'required',
@@ -65,6 +65,9 @@ class SupplierController extends Controller
     $supplier->name     = $request->input('name');
     $supplier->address  = $request->input('address');
     $supplier->currency = $request->input('currency');
+    if ($request->has('status')) {
+      $supplier->status = strtoupper($request->input('status'));
+    }
     $supplier->save();
 
     $json['supplier'] = $supplier;
