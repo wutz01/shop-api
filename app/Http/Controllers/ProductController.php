@@ -145,4 +145,32 @@ class ProductController extends Controller
       $json['product'] = $product;
       return response()->json($json, 200);
     }
+
+    public function testUploadImage(Request $request) {
+      $data = $request->all();
+      if($image = array_pull($data, 'imageData')){
+       $destinationPath = 'uploads/user/';
+       if (!file_exists(public_path($destinationPath))) {
+           mkdir(public_path($destinationPath), 0777, true);
+       }
+
+       if($image->isValid()){
+         $ext        = $image->getClientOriginalExtension();
+         $filename   = $image->getFilename();
+         $orig_name  = $image->getClientOriginalName();
+
+         $for_upload = $filename . "." . $ext;
+         dd(public_path($destinationPath));
+         // $is_success = $image->move(public_path($destinationPath), $for_upload);
+
+         // if($is_success){
+         //     $user->image_path    = $destinationPath;
+         //     $user->filename      = $filename;
+         //     $user->orig_filename = $orig_name;
+         //     $user->extension     = $ext;
+         //     $user->save();
+         // }
+       }
+      }
+    }
 }

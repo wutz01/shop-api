@@ -108,31 +108,30 @@ class UserController extends Controller
       $user->userType      = $client;
     	$user->save();
 
-      // $data = $request->all();
-      // if($image = array_pull($data, 'image')){
-      //     $destinationPath = 'uploads/users/' . $data['username'] . $user->id . '/';
-      //
-      //     if (!file_exists(public_path($destinationPath))) {
-      //         mkdir(public_path($destinationPath), 0777, true);
-      //     }
-      //
-      //     if($image->isValid()){
-      //         $ext        = $image->getClientOriginalExtension();
-      //         $filename   = $image->getFilename();
-      //         $orig_name  = $image->getClientOriginalName();
-      //
-      //         $for_upload = $filename . "." . $ext;
-      //         $is_success = $image->move(public_path($destinationPath), $for_upload);
-      //
-      //         if($is_success){
-      //             $user->image_path    = $destinationPath;
-      //             $user->filename      = $filename;
-      //             $user->orig_filename = $orig_name;
-      //             $user->extension     = $ext;
-      //             $user->save();
-      //         }
-      //     }
-      // }
+      $data = $request->all();
+      if($image = array_pull($data, 'imageData')){
+       $destinationPath = 'uploads/user/'.$user->id.'/';
+       if (!file_exists(public_path($destinationPath))) {
+           mkdir(public_path($destinationPath), 0777, true);
+       }
+
+       if($image->isValid()){
+         $ext        = $image->getClientOriginalExtension();
+         $filename   = $image->getFilename();
+         $orig_name  = $image->getClientOriginalName();
+
+         $for_upload = $filename . "." . $ext;
+         $is_success = $image->move(public_path($destinationPath), $for_upload);
+
+         if($is_success){
+             $user->image_path    = $destinationPath;
+             $user->filename      = $filename;
+             $user->orig_filename = $orig_name;
+             $user->extension     = $ext;
+             $user->save();
+         }
+       }
+      }
 
     	$json['token'] = $user->createToken('Ordering')->accessToken;
       $json['user'] = $user;
