@@ -38,11 +38,9 @@
 * add to cart Guest - `api/cart/add` (POST)
   - accepts
     - guestId
-    - userId (if exist update cart of guest to user)
     - cartId (if exist update cart)
-    - items (array)
-      - productId
-      - quantity
+    - productId
+    - quantity
 * get cart by guestId - `api/guest/{guestId}/cart` (GET)
 #### Authenticated user can access...
 
@@ -125,10 +123,8 @@
 ##### products
 * add to cart user - `api/cart/add` (POST)
   - accepts
-    - guestId (if exist update cart of guest to user)
     - userId
     - cartId (if exist update cart)
-    - items (array)
-      - productId
-      - quantity
+    - productId
+    - quantity
 * get cart by userId - `api/user/my-cart` (GET)
