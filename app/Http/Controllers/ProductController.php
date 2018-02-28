@@ -11,7 +11,11 @@ use Validator, Auth;
 
 class ProductController extends Controller
 {
-    public function allCategory () {
+    public function allCategory (Request $request) {
+      if ($request->has('status')) {
+        $json['categories'] = Category::where('status', strtoupper($request->input('status')))->get();
+        return response()->json($json, 200);
+      }
       $json['categories'] = Category::all();
       return response()->json($json, 200);
     }
@@ -78,7 +82,11 @@ class ProductController extends Controller
       return response()->json($json, 200);
     }
 
-    public function allProducts () {
+    public function allProducts (Request $request) {
+      if ($request->has('status')) {
+        $json['products'] = Product::where('status', strtoupper($request->input('status')))->get();
+        return response()->json($json, 200);
+      }
       $json['products'] = Product::all();
       return response()->json($json, 200);
     }

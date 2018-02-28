@@ -174,7 +174,11 @@ class UserController extends Controller
       return response()->json($json, 200);
     }
 
-    public function getAllUsers () {
+    public function getAllUsers (Request $request) {
+      if ($request->has('status')) {
+        $json['users'] = User::where('status', strtoupper($request->input('status')))->get();
+        return response()->json($json, 200);
+      }
       $json['users'] = User::all();
       return response()->json($json, 200);
     }

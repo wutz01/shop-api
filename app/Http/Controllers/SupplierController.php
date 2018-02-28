@@ -8,7 +8,11 @@ use Validator, Auth;
 
 class SupplierController extends Controller
 {
-  public function allSuppliers () {
+  public function allSuppliers (Request $request) {
+    if ($request->has('status')) {
+      $json['suppliers'] = Supplier::where('status', strtoupper($request->input('status')))->get();
+      return response()->json($json, 200);
+    }
     $json['suppliers'] = Supplier::all();
     return response()->json($json, 200);
   }
