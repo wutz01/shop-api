@@ -40,6 +40,9 @@ class SupplierController extends Controller
     $supplier->name     = $request->input('name');
     $supplier->address  = $request->input('address');
     $supplier->currency = $request->input('currency');
+    if ($request->has('status')) {
+      $supplier->status = strtoupper($request->input('status'));
+    }
     $supplier->save();
 
     $json['supplier'] = $supplier;

@@ -11,74 +11,46 @@ use Auth;
 class CartController extends Controller
 {
     public function getCartByUser() {
-      $json['cart'] = $cart = Cart::where('userId', Auth::user()->id)->where('status', 'ACTIVE', 'AND')->first();
+      $cart = Cart::where('userId', Auth::user()->id)->where('status', 'ACTIVE', 'AND')->first();
       if ($cart) {
         $json['items'] = $cart->items;
+      } else {
+        $cart = new Cart;
+        $cart->userId = Auth::user()->id;
+        $cart->save();
       }
+
+      $json['cart'] = $cart;
       return response()->json($json, 200);
     }
 
     public function getCartByGuestId($guestId) {
-      $json['cart'] = $cart = Cart::where('guestId', $guestId)->where('status', 'ACTIVE', 'AND')->first();
+      $cart = Cart::where('guestId', $guestId)->where('status', 'ACTIVE', 'AND')->first();
       if ($cart) {
         $json['items'] = $cart->items;
+      } else {
+        $cart = new Cart;
+        $cart->guestId = $guestId;
+        $cart->save();
       }
+
+      $json['cart'] = $cart;
       return response()->json($json, 200);
     }
 
     public function addToCart(Request $request) {
       $authId = $request->has('userId') ? $request->input('userId') : $request->input('guestId');
-
-      if ($request->has('userId') && $request->has('guestId') && $request->has('cartId')) {
-        $updateMainCart = Cart::where('id', $request->input('cartId'))->where('guestId', $request->input('guestId'))->first();
-        $updateMainCart->userId = $authId;
-        $updateMainCart->save();
-      }
-
-      if (!$request->has('cartId')) {
-        $cart = new Cart;
-        if ($request->has('userId')) {
-          $cart->userId = $request->input('userId');
-        }
-
-        if ($request->has('guestId')) {
-          $cart->guestId = $request->input('guestId');
-        }
-        $cart->save();
-
-        foreach ($request->input('items') as $key => $value) {
-          $item = new Cart;
-
-          $product = Product::find($value->productId);
-          if (!$product) return response()->json(['error' => 'Product not found'], 400);
-
-          $item->quantity = $value->quantity;
-          $item->productId = $value->productId;
-          $item->cartId = $cart->id;
-          $item->reservePrice = $product->price;
-          $item->finalPrice = 0.00;
-          $item->save();
-        }
-      } else {
-        $cart = Cart::find($request->input('cartId'));
-
-        foreach ($request->input('items') as $key => $value) {
-          $product = Product::find($value->productId);
-          if (!$product) return response()->json(['error' => 'Product not found'], 400);
-
-          if ($value->id) {
-            $item = CartItems::find($value->id);
-          } else {
-            $item = new Cart;
-            $item->reservePrice = $product->price;
-          }
-
-          $item->quantity = $value->quantity;
-          $item->productId = $value->productId;
-          $item->cartId = $cart->id;
-          $item->finalPrice = 0.00;
-          $item->save();
-        }
+      $cartId = $request->input('cartId');
+      $cart = Cart::find($cartId);
+      if ($authId && $cart && $cart->status == 'ACTIVE') {
+        $product = Product::find($request->input('productId'));
+        if (!$product) return response()->json(['error' => 'Product not found!', 400]);
+        $cart->items()->save([
+          'productId' => $request->input('productId'),
+          'quantity' => $request->input('quantity')
+          'reservePrice' => $product->price,
+          'finalPrice' => 0.00
+        ]);
       }
 
       $json['cart'] = $cart;

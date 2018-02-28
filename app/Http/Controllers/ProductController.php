@@ -40,6 +40,9 @@ class ProductController extends Controller
       $category = Category::find($catId);
       $category->name = $request->input('name');
       $category->description = $request->input('description');
+      if ($request->has('status')) {
+        $category->status = strtoupper($request->input('status'));
+      }
       $category->save();
 
       $json['category'] = $category;
