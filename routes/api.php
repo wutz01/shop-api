@@ -78,4 +78,5 @@ Route::get('product/{id}', 'ProductController@getProduct');
  * CART
  */
 Route::post('cart/add', 'CartController@addToCart');
-Route::get('cart/guest/{guestId}/cart', 'CartController@getCartByGuestId');
+Route::get('cart/guest/{guestId}', 'CartController@getCartByGuestId');
+Route::get('cart/remove/item/{itemId}', 'CartController@removeToCart');

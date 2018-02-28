@@ -58,4 +58,11 @@ class CartController extends Controller
 
       return response()->json(['error' => 'Cart not found'], 400);
     }
+
+    public function removeToCart ($itemId) {
+      $item = CartItems::find($itemId);
+      if (!$item) return response()->json(['error' => 'Item not found'], 400);
+      $item->delete();
+      return response()->json(['message' => 'Success'], 200);
+    }
 }

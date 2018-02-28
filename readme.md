@@ -41,7 +41,8 @@
     - cartId (if exist update cart)
     - productId
     - quantity
-* get cart by guestId - `api/guest/{guestId}/cart` (GET)
+* get cart by guestId - `api/guest/{guestId}` (GET)
+* remove cart item - `api/cart/remove/item/{itemId}` (GET)
 #### Authenticated user can access...
 
 * logout - `api/user/logout` (POST)
