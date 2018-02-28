@@ -18,6 +18,7 @@ class CreateProductsTable extends Migration
             $table->string('name');
             $table->text('description');
             $table->decimal('price', 19,2);
+            $table->string('status')->default('ACTIVE');
             $table->timestamps();
         });
 
@@ -25,6 +26,7 @@ class CreateProductsTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->text('description');
+            $table->string('status')->default('ACTIVE');
             $table->timestamps();
         });
 

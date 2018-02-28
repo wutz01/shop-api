@@ -49,6 +49,12 @@ Route::group(['middleware' => 'auth:api'], function () {
     */
     Route::post('product/update', 'ProductController@updateProduct');
     Route::post('product/create', 'ProductController@createProduct');
+
+   /*
+    * CART
+    */
+    Route::get('cart/guest/{guestId}', 'CartController@getCartByGuestId');
+    Route::get('cart/user/{userId}', 'CartController@getCartByUserId');
 });
 
 Route::post('user/login', 'UserController@authenticate');
@@ -63,3 +69,8 @@ Route::get('generate/guestID', 'ToolsController@generateUUID');
 
 Route::get('product/all', 'ProductController@allProducts');
 Route::get('product/{id}', 'ProductController@getProduct');
+
+/*
+ * CART
+ */
+Route::post('cart/add', 'CartController@addToCart');

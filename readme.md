@@ -35,7 +35,15 @@
 * all products - `api/product/all` (GET)
 * view product - `api/product/{id}` (GET)
 * generate Guest ID - `api/generate/guestID` (GET)
-
+* add to cart Guest - `api/cart/add` (POST)
+  - accepts
+    - guestId
+    - userId (if exist update cart of guest to user)
+    - cartId (if exist update cart)
+    - items (array)
+      - productId
+      - quantity
+* get cart by guestId - `api/guest/{guestId}` (GET)
 #### Authenticated user can access...
 
 * logout - `api/user/logout` (POST)
@@ -113,3 +121,14 @@
     - price (float)
     - categories (array)
     - supplierId (integer)
+
+##### products
+* add to cart user - `api/cart/add` (POST)
+  - accepts
+    - guestId (if exist update cart of guest to user)
+    - userId
+    - cartId (if exist update cart)
+    - items (array)
+      - productId
+      - quantity
+* get cart by userId - `api/user/{userId}` (GET)

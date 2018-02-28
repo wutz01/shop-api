@@ -17,6 +17,7 @@ class CreateHashkeysTable extends Migration
             $table->increments('id');
             $table->text('uuid');
             $table->text('ip_address');
+            $table->string('status')->default('ACTIVE');
             $table->timestamps();
         });
     }

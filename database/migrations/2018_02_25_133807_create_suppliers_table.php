@@ -18,6 +18,7 @@ class CreateSuppliersTable extends Migration
             $table->string('name');
             $table->text('address');
             $table->string('currency');
+            $table->string('status')->default('ACTIVE');
             $table->timestamps();
         });
     }
