@@ -148,13 +148,11 @@ class ProductController extends Controller
 
     public function testUploadImage(Request $request) {
       $data = $request->all();
-      dd($data);
-      if($image = array_pull($data, 'image')){
-       $destinationPath = 'uploads/users/';
-       //
-       // if (!file_exists(public_path($destinationPath))) {
-       //     mkdir(public_path($destinationPath), 0777, true);
-       // }
+      if($image = array_pull($data, 'imageData')){
+       $destinationPath = 'uploads/user/';
+       if (!file_exists(public_path($destinationPath))) {
+           mkdir(public_path($destinationPath), 0777, true);
+       }
 
        if($image->isValid()){
          $ext        = $image->getClientOriginalExtension();
@@ -162,7 +160,6 @@ class ProductController extends Controller
          $orig_name  = $image->getClientOriginalName();
 
          $for_upload = $filename . "." . $ext;
-
          dd(public_path($destinationPath));
          // $is_success = $image->move(public_path($destinationPath), $for_upload);
 
