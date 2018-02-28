@@ -49,6 +49,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     */
     Route::post('product/update', 'ProductController@updateProduct');
     Route::post('product/create', 'ProductController@createProduct');
+    Route::post('product/upload/image', 'ProductController@testUploadImage');
 
    /*
     * CART
