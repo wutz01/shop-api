@@ -87,6 +87,8 @@
     - name (string)
     - description (text)
 
+* delete category - `api/category/{catId}/delete` (GET)
+
 ##### product supplier
 * all suppliers - `api/supplier/all` (GET)
 * view supplier - `api/supplier/{id}` (GET)
@@ -102,6 +104,8 @@
     - name (string)
     - address (text)
     - currency (string)
+
+* delete supplier - `api/supplier/{supplierId}/delete` (GET)
 
 ##### products
 * create product - `api/product/create` (POST)
@@ -119,6 +123,12 @@
     - price (float)
     - categories (array)
     - supplierId (integer)
+* upload product image - `api/product/upload/image` (POST)
+  - accepts
+    - productId
+    - productImage (validates image only)
+* delete product - `api/product/delete/{productId}` (GET)
+* delete productImage - `product/delete/image/{productId}?imageId=?` (GET)
 
 ##### products
 * add to cart user - `api/cart/add` (POST)
