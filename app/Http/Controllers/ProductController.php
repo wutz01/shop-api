@@ -131,7 +131,6 @@ class ProductController extends Controller
       $product->supplierId  = $request->input('supplierId');
       $product->brand       = $request->input('brand');
       $product->specification      = $request->input('specification');
-      $product->specificationValue = $request->input('specificationValue');
       if ($request->has('status')) $product->status = strtoupper($request->input('status'));
       if ($request->has('isFeatured')) $product->isFeatured = $request->input('isFeatured');
       $product->save();
@@ -159,7 +158,6 @@ class ProductController extends Controller
       $product->supplierId  = $request->input('supplierId');
       $product->brand       = $request->input('brand');
       $product->specification      = $request->input('specification');
-      $product->specificationValue = $request->input('specificationValue');
       if ($request->has('status')) $product->status    = strtoupper($request->input('status'));
       if ($request->has('isFeatured')) $product->isFeatured = $request->input('isFeatured');
       $product->save();

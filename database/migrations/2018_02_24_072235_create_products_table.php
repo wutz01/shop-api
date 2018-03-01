@@ -20,7 +20,6 @@ class CreateProductsTable extends Migration
             $table->decimal('price', 19,2);
             $table->string('brand')->nullable();
             $table->string('specification')->nullable();
-            $table->decimal('specificationValue', 19,2)->default(0.00);
             $table->string('status')->default('ACTIVE');
             $table->string('isFeatured')->default("false");
             $table->timestamps();
