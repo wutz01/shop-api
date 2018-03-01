@@ -62,7 +62,7 @@ class ProductsSeeder extends Seeder
         $pro1->name = 'Speaker';
         $pro1->description = '7.1 Surround Sound';
         $pro1->price = 500.00;
-        $pro1->supplier_id = $sup1->id;
+        $pro1->supplierId = $sup1->id;
         $pro1->save();
         $pro1->categories()->sync([$cat1->id, $cat3->id]);
 
@@ -70,7 +70,7 @@ class ProductsSeeder extends Seeder
         $pro2->name = 'HDMI Cable';
         $pro2->description = '3 Meters cable';
         $pro2->price = 35.00;
-        $pro2->supplier_id = $sup3->id;
+        $pro2->supplierId = $sup3->id;
         $pro2->save();
         $pro2->categories()->sync([$cat1->id, $cat3->id, $cat4->id]);
 
@@ -78,7 +78,7 @@ class ProductsSeeder extends Seeder
         $pro3->name = 'Water Jog';
         $pro3->description = 'Can contain 2 liters of liquid';
         $pro3->price = 30.00;
-        $pro3->supplier_id = $sup4->id;
+        $pro3->supplierId = $sup4->id;
         $pro3->save();
         $pro3->categories()->sync($cat2->id);
     }

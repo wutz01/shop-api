@@ -14,7 +14,7 @@ class AddFieldsProducts extends Migration
     public function up()
     {
       Schema::table('products', function (Blueprint $table) {
-        $table->integer('supplier_id')->after('price');
+        $table->integer('supplierId')->after('price');
       });
     }
 
@@ -26,7 +26,7 @@ class AddFieldsProducts extends Migration
     public function down()
     {
       Schema::table('products', function (Blueprint $table) {
-        $table->dropColumn('supplier_id');
+        $table->dropColumn('supplierId');
       });
     }
 }

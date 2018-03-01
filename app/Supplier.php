@@ -12,6 +12,6 @@ class Supplier extends Model
      * This Supplier has many products
      */
     public function products () {
-      return $this->hasMany('App\Product');
+      return $this->hasMany('App\Product', 'supplierId');
     }
 }

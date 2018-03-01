@@ -14,7 +14,7 @@ class Product extends Model
    * @var array
    */
   protected $hidden = [
-      'supplier_id'
+      'supplierId'
   ];
 
   /**
@@ -29,7 +29,7 @@ class Product extends Model
    * This Product belongs to a supplier
    */
   public function supplier () {
-    return $this->belongsTo('App\Supplier');
+    return $this->belongsTo('App\Supplier', 'supplierId');
   }
 
   /*

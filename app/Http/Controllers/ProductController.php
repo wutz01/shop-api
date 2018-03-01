@@ -116,8 +116,8 @@ class ProductController extends Controller
       if (!isset($prodId)) return response()->json(['error' => 'Product not found'], 404);
 
       $validator = Validator::make($request->all(), [
-          'name'             => 'required',
-          'supplier_id'      => 'required'
+          'name'       => 'required',
+          'supplierId' => 'required'
       ]);
 
       if ($validator->fails()) {
@@ -128,7 +128,7 @@ class ProductController extends Controller
       $product->name        = $request->input('name');
       $product->description = $request->input('description');
       $product->price       = $request->input('price');
-      $product->supplier_id = $request->input('supplier_id');
+      $product->supplierId  = $request->input('supplierId');
       $product->brand       = $request->input('brand');
       $product->specification      = $request->input('specification');
       $product->specificationValue = $request->input('specificationValue');
@@ -144,8 +144,8 @@ class ProductController extends Controller
 
     public function createProduct (Request $request) {
       $validator = Validator::make($request->all(), [
-          'name'             => 'required',
-          'supplier_id'      => 'required'
+          'name'       => 'required',
+          'supplierId' => 'required'
       ]);
 
       if ($validator->fails()) {
@@ -156,7 +156,10 @@ class ProductController extends Controller
       $product->name        = $request->input('name');
       $product->description = $request->input('description');
       $product->price       = $request->input('price') ? $request->input('price') : 0.00;
-      $product->supplier_id = $request->input('supplier_id');
+      $product->supplierId  = $request->input('supplierId');
+      $product->brand       = $request->input('brand');
+      $product->specification      = $request->input('specification');
+      $product->specificationValue = $request->input('specificationValue');
       if ($request->has('status')) $product->status    = strtoupper($request->input('status'));
       if ($request->has('isFeatured')) $product->isFeatured = $request->input('isFeatured');
       $product->save();
