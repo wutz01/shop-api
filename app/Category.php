@@ -9,6 +9,15 @@ class Category extends Model
     protected $table = 'categories';
 
     /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'created_at', 'updated_at', 'pivot'
+    ];
+
+    /**
      * The category that belong to the products.
      */
     public function products()

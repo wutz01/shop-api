@@ -127,7 +127,7 @@ class UserController extends Controller
          if($is_success){
            $fileImage = new UserImage;
            $fileImage->userId = $user->id;
-           $fileImage->imagePath = url('/') . $destinationPath;
+           $fileImage->imagePath = url('/') . "/" . $destinationPath;
            $fileImage->filename = $filename;
            $fileImage->origFilename = $orig_name;
            $fileImage->extension = $ext;
@@ -300,7 +300,7 @@ class UserController extends Controller
            if (!$fileImage) {
              $fileImage = new UserImage;
            }
-           $fileImage->imagePath = url('/') . $destinationPath;
+           $fileImage->imagePath = url('/') . "/" . $destinationPath;
            $fileImage->filename = $filename;
            $fileImage->origFilename = $orig_name;
            $fileImage->extension = $ext;

@@ -87,7 +87,38 @@ class ProductController extends Controller
         $json['products'] = Product::where('status', strtoupper($request->input('status')))->get();
         return response()->json($json, 200);
       }
-      $json['products'] = Product::all();
+      $products = Product::all();
+
+      $array = [];
+      foreach ($products as $key => $value) {
+        $image = $value->images()->first();
+        if ($image) {
+          $path = $image->imagePath;
+          $filename = $image->filename;
+          $ext = $image->extension;
+          $fsRef = $path . $filename . "." . $ext;
+        } else {
+          $fsRef = null;
+        }
+
+        $array[] = [
+          'id'            => $value->id,
+          'name'          => $value->name,
+          'description'   => $value->description,
+          'price'         => (float) $value->price,
+          'brand'         => $value->brand,
+          'specification' => $value->specification,
+          'status'        => $value->status,
+          'isFeatured'    => $value->isFeatured,
+          'status'        => $value->status,
+          'fsRef'         => $fsRef,
+          'categories'    => $value->categories,
+          'supplier'      => $value->supplier,
+          'images'        => $value->images
+        ];
+      }
+
+      $json['products'] = $array;
       return response()->json($json, 200);
     }
 
@@ -201,7 +232,7 @@ class ProductController extends Controller
          if($is_success){
            $fileImage               = new ProductImages;
            $fileImage->productId    = $product->id;
-           $fileImage->imagePath    = url('/') . $destinationPath;
+           $fileImage->imagePath    = url('/') . "/" . $destinationPath;
            $fileImage->filename     = $filename;
            $fileImage->origFilename = $orig_name;
            $fileImage->extension    = $ext;
