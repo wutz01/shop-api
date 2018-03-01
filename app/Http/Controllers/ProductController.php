@@ -117,7 +117,6 @@ class ProductController extends Controller
 
       $validator = Validator::make($request->all(), [
           'name'             => 'required',
-          'description'		   => 'required',
           'supplier_id'      => 'required'
       ]);
 
@@ -126,16 +125,15 @@ class ProductController extends Controller
         return response()->json($json, 400);
       }
       $product = Product::find($prodId);
-      $product->name = $request->input('name');
+      $product->name        = $request->input('name');
       $product->description = $request->input('description');
-      $product->price = $request->input('price');
+      $product->price       = $request->input('price');
       $product->supplier_id = $request->input('supplier_id');
-      if ($request->has('status')) {
-        $product->status = strtoupper($request->input('status'));
-      }
-      if ($request->has('isFeatured')) {
-        $product->isFeatured = $request->input('isFeatured');
-      }
+      $product->brand       = $request->input('brand');
+      $product->specification      = $request->input('specification');
+      $product->specificationValue = $request->input('specificationValue');
+      if ($request->has('status')) $product->status = strtoupper($request->input('status'));
+      if ($request->has('isFeatured')) $product->isFeatured = $request->input('isFeatured');
       $product->save();
 
       $product->categories()->sync($request->input('categories'));
@@ -147,7 +145,6 @@ class ProductController extends Controller
     public function createProduct (Request $request) {
       $validator = Validator::make($request->all(), [
           'name'             => 'required',
-          'description'		   => 'required',
           'supplier_id'      => 'required'
       ]);
 
@@ -156,16 +153,12 @@ class ProductController extends Controller
         return response()->json($json, 400);
       }
       $product = new Product;
-      $product->name = $request->input('name');
+      $product->name        = $request->input('name');
       $product->description = $request->input('description');
-      $product->price = $request->input('price') ? $request->input('price') : 0.00;
+      $product->price       = $request->input('price') ? $request->input('price') : 0.00;
       $product->supplier_id = $request->input('supplier_id');
-      if ($request->has('status')) {
-        $product->status = strtoupper($request->input('status'));
-      }
-      if ($request->has('isFeatured')) {
-        $product->isFeatured = $request->input('isFeatured');
-      }
+      if ($request->has('status')) $product->status    = strtoupper($request->input('status'));
+      if ($request->has('isFeatured')) $product->isFeatured = $request->input('isFeatured');
       $product->save();
 
       $product->categories()->sync($request->input('categories'));

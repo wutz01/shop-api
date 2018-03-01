@@ -16,8 +16,11 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->decimal('price', 19,2);
+            $table->string('brand')->nullable();
+            $table->string('specification')->nullable();
+            $table->decimal('specificationValue', 19,2)->default(0.00);
             $table->string('status')->default('ACTIVE');
             $table->string('isFeatured')->default("false");
             $table->timestamps();
@@ -26,7 +29,7 @@ class CreateProductsTable extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->string('status')->default('ACTIVE');
             $table->timestamps();
         });
