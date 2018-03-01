@@ -75,7 +75,7 @@
     - designation (Required if CLIENT)
     - userType
 
-##### product categories
+##### CATEGORIES
 * all categories - `api/category/all` (GET)
 * view category - `api/category/{id}` (GET)
 * create category - `api/category/create` (POST)
@@ -90,7 +90,7 @@
 
 * delete category - `api/category/{catId}/delete` (GET)
 
-##### product supplier
+##### SUPPLIER
 * all suppliers - `api/supplier/all` (GET)
 * view supplier - `api/supplier/{id}` (GET)
 * create supplier - `api/supplier/create` (POST)
@@ -108,12 +108,14 @@
 
 * delete supplier - `api/supplier/{supplierId}/delete` (GET)
 
-##### products
+##### PRODUCTS
 * create product - `api/product/create` (POST)
   - accepts:
     - name (string)
     - description (text)
     - price (float)
+    - brand
+    - specification
     - categories (array)
     - supplierId (integer)
 * update product - `api/product/update` (POST)
@@ -122,16 +124,18 @@
     - name (string)
     - description (text)
     - price (float)
+    - brand
+    - specification
     - categories (array)
     - supplierId (integer)
 * upload product image - `api/product/upload/image` (POST)
   - accepts
     - productId
     - productImage (validates image only)
-* delete product - `api/product/delete/{productId}` (GET)
+* update product status - `api/product/update/{productId}/status/{status}` (GET)
 * delete productImage - `product/delete/image/{productId}?imageId=?` (GET)
 
-##### products
+##### CART
 * add to cart user - `api/cart/add` (POST)
   - accepts
     - userId

@@ -123,14 +123,72 @@ class ProductController extends Controller
     }
 
     public function getProduct ($id) {
-      $json['product'] = $product = Product::find($id);
+      $product = Product::find($id);
       if ($product) {
-        $json['categories'] = $product->categories;
-        $json['supplier'] = $product->supplier;
-        $json['images'] = $product->images;
+        $image = $product->images()->first();
+        if ($image) {
+          $path = $image->imagePath;
+          $filename = $image->filename;
+          $ext = $image->extension;
+          $fsRef = $path . $filename . "." . $ext;
+        } else {
+          $fsRef = null;
+        }
+
+        $json['product'] = $array = [
+          'id'            => $product->id,
+          'name'          => $product->name,
+          'description'   => $product->description,
+          'price'         => (float) $product->price,
+          'brand'         => $product->brand,
+          'specification' => $product->specification,
+          'status'        => $product->status,
+          'isFeatured'    => $product->isFeatured,
+          'status'        => $product->status,
+          'fsRef'         => $fsRef,
+          'categories'    => $product->categories,
+          'supplier'      => $product->supplier,
+          'images'        => $product->images
+        ];
         return response()->json($json, 200);
       }
       return response()->json($json, 404);
+    }
+
+    public function updateStatus ($productId, $status) {
+      $product = Product::find($id);
+      if ($product) {
+        $product->status = strtoupper($status);
+        $product->save();
+
+        $image = $product->images()->first();
+        if ($image) {
+          $path = $image->imagePath;
+          $filename = $image->filename;
+          $ext = $image->extension;
+          $fsRef = $path . $filename . "." . $ext;
+        } else {
+          $fsRef = null;
+        }
+
+        $json['product'] = $array = [
+          'id'            => $product->id,
+          'name'          => $product->name,
+          'description'   => $product->description,
+          'price'         => (float) $product->price,
+          'brand'         => $product->brand,
+          'specification' => $product->specification,
+          'status'        => $product->status,
+          'isFeatured'    => $product->isFeatured,
+          'status'        => $product->status,
+          'fsRef'         => $fsRef,
+          'categories'    => $product->categories,
+          'supplier'      => $product->supplier,
+          'images'        => $product->images
+        ];
+        return response()->json($json, 200);
+      }
+      return response()->json(['error', 'Product not found'], 404);
     }
 
     public function deleteProduct ($productId) {
@@ -168,7 +226,31 @@ class ProductController extends Controller
 
       $product->categories()->sync($request->input('categories'));
 
-      $json['product'] = $product;
+      $image = $product->images()->first();
+      if ($image) {
+        $path = $image->imagePath;
+        $filename = $image->filename;
+        $ext = $image->extension;
+        $fsRef = $path . $filename . "." . $ext;
+      } else {
+        $fsRef = null;
+      }
+
+      $json['product'] = $array = [
+        'id'            => $product->id,
+        'name'          => $product->name,
+        'description'   => $product->description,
+        'price'         => (float) $product->price,
+        'brand'         => $product->brand,
+        'specification' => $product->specification,
+        'status'        => $product->status,
+        'isFeatured'    => $product->isFeatured,
+        'status'        => $product->status,
+        'fsRef'         => $fsRef,
+        'categories'    => $product->categories,
+        'supplier'      => $product->supplier,
+        'images'        => $product->images
+      ];
       return response()->json($json, 200);
     }
 
@@ -195,7 +277,31 @@ class ProductController extends Controller
 
       $product->categories()->sync($request->input('categories'));
 
-      $json['product'] = $product;
+      $image = $product->images()->first();
+      if ($image) {
+        $path = $image->imagePath;
+        $filename = $image->filename;
+        $ext = $image->extension;
+        $fsRef = $path . $filename . "." . $ext;
+      } else {
+        $fsRef = null;
+      }
+
+      $json['product'] = $array = [
+        'id'            => $product->id,
+        'name'          => $product->name,
+        'description'   => $product->description,
+        'price'         => (float) $product->price,
+        'brand'         => $product->brand,
+        'specification' => $product->specification,
+        'status'        => $product->status,
+        'isFeatured'    => $product->isFeatured,
+        'status'        => $product->status,
+        'fsRef'         => $fsRef,
+        'categories'    => $product->categories,
+        'supplier'      => $product->supplier,
+        'images'        => $product->images
+      ];
       return response()->json($json, 200);
     }
 
