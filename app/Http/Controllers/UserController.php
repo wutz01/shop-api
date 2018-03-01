@@ -55,7 +55,7 @@ class UserController extends Controller
           'email'		         => 'email|required|unique:users,email',
           'password'	       => 'required|min:6',
           'confirm_password' => 'required|same:password',
-          'image'            => 'image',
+          'userImage'        => 'image',
           'country'          => 'required',
           'userType'         => 'required'
       ];
@@ -83,7 +83,7 @@ class UserController extends Controller
 
     	$user = new User;
     	$user->firstname     = $request->input('firstname');
-    	$user->middlename    = $request->input('middlename');
+    	$user->middlename    = $request->input('middlename') != null ? $request->input('middlename') : '';
     	$user->lastname      = $request->input('lastname');
     	$user->mobileNo      = $request->input('mobileNo');
     	$user->phoneNo       = $request->input('phoneNo');
@@ -210,7 +210,7 @@ class UserController extends Controller
           'mobileNo'         => 'required',
           'phoneNo'          => 'required',
           'email'		         => 'email|required|unique:users,email,'.$userId,
-          'image'            => 'image',
+          'userImage'        => 'image',
           'country'          => 'required',
           'userType'         => 'required'
       ];
