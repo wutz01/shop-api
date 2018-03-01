@@ -9,6 +9,6 @@ class UserImage extends Model
     protected $table = 'user_images';
 
     public function user () {
-      return $this->belongsTo('App\User');
+      return $this->belongsTo('App\User', 'userId');
     }
 }
