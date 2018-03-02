@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Product;
 use App\ProductImages;
 use App\Category;
-use Validator, Auth;
+use Validator, Aut, DB;
 
 class ProductController extends Controller
 {
@@ -83,12 +83,22 @@ class ProductController extends Controller
     }
 
     public function allProducts (Request $request) {
-      if ($request->has('status')) {
-        $json['products'] = Product::where('status', strtoupper($request->input('status')))->get();
-        return response()->json($json, 200);
-      }
-      $products = Product::all();
 
+      if ($request->input('status') === 'ALL') {
+        $products = Product::all();
+      } else {
+        $products = Product::where('status', strtoupper($request->input('status')));
+      }
+
+      if ($request->has('q')) {
+        $products->where('brand', 'LIKE', '%'. $request->input('q') . '%')->where('specification', 'LIKE', '%'. $request->input('q') . '%', 'OR');
+      }
+
+      $json['products'] = $this->returnProduct($products->get());
+      return response()->json($json, 200);
+    }
+
+    public function returnProduct($products) {
       $array = [];
       foreach ($products as $key => $value) {
         $image = $value->images()->first();
@@ -118,8 +128,7 @@ class ProductController extends Controller
         ];
       }
 
-      $json['products'] = $array;
-      return response()->json($json, 200);
+      return $array;
     }
 
     public function getProduct ($id) {
