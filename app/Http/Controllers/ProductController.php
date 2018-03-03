@@ -43,8 +43,7 @@ class ProductController extends Controller
       if (!isset($catId)) return response()->json(['error' => 'Category not found'], 404);
 
       $validator = Validator::make($request->all(), [
-          'name'             => 'required',
-          'description'		   => 'required'
+          'name'             => 'required'
       ]);
 
       if ($validator->fails()) {
@@ -65,8 +64,7 @@ class ProductController extends Controller
 
     public function createCategory (Request $request) {
       $validator = Validator::make($request->all(), [
-          'name'             => 'required',
-          'description'		   => 'required'
+          'name'             => 'required'
       ]);
 
       if ($validator->fails()) {
