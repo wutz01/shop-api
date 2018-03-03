@@ -84,16 +84,30 @@ class ProductController extends Controller
 
     public function allProducts (Request $request) {
 
-      if ($request->input('status') === 'ALL') {
-        $products = Product::all();
+      if ($request->input('status') === 'ALL' || !$request->has('status')) {
+        $products = Product::where('status', 'ACTIVE')->orWhere('status', 'INACTIVE');
       } else {
-        $products = Product::where('status', strtoupper($request->input('status')));
+        $products = Product::where('status', strtoupper($request->input('status')), 'AND');
       }
 
       if ($request->has('q')) {
         $products->where('brand', 'LIKE', '%'. $request->input('q') . '%')->where('specification', 'LIKE', '%'. $request->input('q') . '%', 'OR');
       }
 
+      if ($request->has('categories')) {
+        $products->whereHas('categories', function($q) use ($request){
+          if (strpos($request->input('categories'), ",") !== false) {
+            $cat = explode(",", $request->input('categories'));
+            foreach($cat as $key => $value) {
+              $q->orWhere('category_id', $value);
+            }
+          } else {
+            $q->where('category_id', $request->input('categories'), 'OR');
+          }
+        });
+      }
+
+      // dd($products->toSql());
       $json['products'] = $this->returnProduct($products->get());
       return response()->json($json, 200);
     }
