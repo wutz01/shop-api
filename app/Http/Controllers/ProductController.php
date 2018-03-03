@@ -163,7 +163,7 @@ class ProductController extends Controller
     }
 
     public function updateStatus ($productId, $status) {
-      $product = Product::find($id);
+      $product = Product::find($productId);
       if ($product) {
         $product->status = strtoupper($status);
         $product->save();
